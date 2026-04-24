@@ -1,0 +1,47 @@
+/*
+ * Giant Scroll — layout styles
+ *
+ * Targets any Gutenberg Cover block whose id begins with "section"
+ * (e.g. section, section-1, section-2 …).
+ */
+
+/* ── Active state (applied by JS when init succeeds) ── */
+
+body.giant-scroll-active {
+	overflow: hidden;
+	height: 100%;
+}
+
+body.giant-scroll-active .giant-scroll-wrapper {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	/* height is set inline by JS */
+	will-change: transform;
+	/* GPU-composited slide — no layout thrash */
+	transition-property: transform;
+	transition-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
+	/* duration injected via CSS custom property set by JS */
+	transition-duration: var(--giant-scroll-duration, 800ms);
+}
+
+/* Each section fills the viewport */
+body.giant-scroll-active [id^="section"] {
+	width: 100% !important;
+	height: 100vh !important;
+	min-height: 100vh !important;
+	max-height: 100vh !important;
+	/* prevent individual blocks from overflowing their slide */
+	overflow: hidden;
+}
+
+/*
+ * Respect the "disable on mobile" option.
+ * When giant_scroll_disable_mobile is true, the JS adds this class to <body>
+ * at narrow viewports instead of giant-scroll-active.
+ */
+body.giant-scroll-mobile-off [id^="section"] {
+	height: 100vh !important;
+	min-height: 100vh !important;
+}
